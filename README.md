@@ -119,7 +119,8 @@ jobs:
 * Github Actions kısmında Pipeline adımlarının gerçekleştiğini görmüş olacağız. 
 ### Şimdi ise Terraform kodlarımızla VPC Altyapısını ve EKS Cluster yapısını oluşturalım
 * terraform.yml dosyanızı açıp bu içeriği ekleyin:
-* - name: Terraform Apply
+``` bash
+       - name: Terraform Apply
          id: apple
          if: github.ref == 'refs/heads/main' && github.event_name == 'push'
          run: terraform apply -auto-approve -input=false -parallelism=1 planfile
@@ -139,6 +140,7 @@ jobs:
        - name: Install Ingress controller
          if: steps.apple.outcome == 'success' && steps.getconfig.outcome == 'success'
          run: kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.1.3/deploy/static/provider/aws/deploy.yaml
+```
 
 * Buradaki komutları VPC ve EKS Cluster oluşturacak olan son komutlarımızdır. Bu komutları bir önceki komutlarla birleştirmelisiniz.
 * terraform/ klasörümüze bir içerik ekledik ve Commit&Push işlemi yaptık.
