@@ -49,7 +49,9 @@
 * Terraform kaynak kodumuzun "iac-vprofie" klasörünü VScode ile açtık.
 * ".github/workflows" adında bir klasör oluşturduk.Bu klasör içinde "terraform.yml" dosyası oluşturuyoruz.Bu dosya ile github actions içerisinde terraform kodlarımızı çalıştırmış olacağız.
 * Aşağıdaki kodları "terraform.yml" dosyamıza yapıştıralım
-*name: "Vprofile IAC"  
+``` bash
+
+name: "Vprofile IAC"  
  on:
   push:
     branches:
@@ -110,6 +112,8 @@ jobs:
        - name: Terraform plan status
          if: steps.plan.outcome == 'failure' 
          run: exit 1
+```
+
 * Yukarıda yapıştırdığım kod içerisindeki "AWS_REGION" kısmına S3 Bucket ve ECR bölgemizi ekliyoruz.
 * VSCode Source Control kısmından Commit&Push seçeneğine tıklıyoruz ve Commit mesajını yazdıktan sonra Save basıyoruz.
 * Github Actions kısmında Pipeline adımlarının gerçekleştiğini görmüş olacağız. 
