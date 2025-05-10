@@ -162,7 +162,8 @@ jobs:
 * Son olarak yeni bir Github Secret oluşturuyoruz.Name kısmına "SONAR_URL" giriyoruz Secret kısmına ise "https://sonarcloud.io" giriyoruz. 
 * Fork ettiğimizi uygulama kaynak kodumuzu VScode ile açıyoruz.
 * ".github/workflows" adında bir klasör oluşturuyoruz ve bu klasörün içerisine "main.yml" dosyası oluşturuyoruz.Bu dosyamızın içerisin aşağıdaki kodları yazıyoruz:
-* name: vprofile actions
+``` bash
+name: vprofile actions
 on: workflow_dispatch
 env:
   AWS_REGION: us-east-2
@@ -217,6 +218,7 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_URL }} #OPTIONAL
+```
 * VScode Source Control kısmından "Commit&Push" basıyoruz.
 * Uygulamamızın kaynak koduna geliyoruz.Actions kısmına geliyoruz."vprofile-actions" seçeneğine basıyoruz. "Run workflow" basıyoruz.İlk başta workflow hata verecektir.Tekrardan çalıştırıyoruz ve Test işlemi bitti.
 ### Şimdi ise Docker container Build ve Publish işlemini yapalım.
