@@ -141,7 +141,6 @@ jobs:
          if: steps.apple.outcome == 'success' && steps.getconfig.outcome == 'success'
          run: kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.1.3/deploy/static/provider/aws/deploy.yaml
 ```
-
 * Buradaki komutları VPC ve EKS Cluster oluşturacak olan son komutlarımızdır. Bu komutları bir önceki komutlarla birleştirmelisiniz.
 * terraform/ klasörümüze bir içerik ekledik ve Commit&Push işlemi yaptık.
 * Github Actions kısmında Workflow başlayacaktır ancak son eklediğimiz komutlar çalışmayacaktır.Çünkü "main" stage içerisinde push işlemi yapmadık.Projenin sonunda push işlemini gerçekleştireceğiz.
@@ -257,6 +256,45 @@ jobs:
 * cp kubernetes/vpro-app/* vprofilecharts/templates/
 * cd vprofilecharts/templates/
 * VSCode ile Uygulama kaynak kodumuzu açıyoruz."helm\vprofilecharts/templatesa/vproappdep.yml" dosyamızı açıyoruz ve bu içeriği "image: vprofile/vprofileapp" bu "image: {{ .Values.appimage}}:{{ .Values.apptag }}" içeriğe dönüştürüyoruz.
+* main.yml dosymaıza bu kodları ekliyoruz:
+``` bash
+  DeployToEKS:
+    needs: BUILD_AND_PUBLISH
+    runs-on: ubuntu-latest
+    steps:
+      - name: Code checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Get Kube config file
+        run: aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.EKS_CLUSTER }}
+
+      - name: Print config file
+        run: cat ~/.kube/config
+
+      - name: Login to ECR
+        run: kubectl create secret docker-registry regcred --docker-server=${{ secrets.REGISTRY }} --docker-username=AWS  --docker-password=$(aws ecr get-login-password)
+
+      - name: Deploy Helm
+        uses: bitovi/github-actions-deploy-eks-helm@v1.2.8
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+          cluster-name: ${{ env.EKS_CLUSTER }}
+          #config-files: .github/values/dev.yaml
+          chart-path: helm/vprofilecharts
+          namespace: default
+          values: appimage=${{ secrets.REGISTRY }}/${{ env.ECR_REPOSITORY }},apptag=${{ github.run_number }}
+          name: vprofile-stack
+
+```
 * VSCode Source Control kısmına geliyoruz Commit&Push işlemi yapıyoruz.
 * Github Actions kısmına geliyoruz "vprofile-actions" kısmına basıyoruz ve Run Workflow basıyoruz ve workflow başlayacaktır.
 * Tüm adımlar tamamlandıktan sonra Tüm kaynaklarımız oluşmuş bir şekilde ve uygulamamız docker container içerisinde deploy edilmiş şekilde yani Uygulamamız bitmiş olacaktır.
