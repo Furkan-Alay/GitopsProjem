@@ -1,56 +1,84 @@
-# Projeme Hoşgeldiniz Aşağıdaki adımları takip ederek projeyi localinizde çalıştırabilirsiniz İyi çalışmalar.
-# "https://github.com/Furkan-Alay/GitopsProjem" ve "https://github.com/Furkan-Alay/GitappProjem" buradaki resource kısmına gidip ayrı ayrı her ikisi için SSH linkinden fork işlemini yapmanız gerekmektedir.
-# Daha sonra terminalinizi açıp SSH key oluşturmanız gerekmektedir. buradaki kodları sırayla terminale yazınız. 
+# Welcome to My Project!  
+By following the steps below, you can run the project on your local machine. Good luck!
+
+# You need to fork both "https://github.com/Furkan-Alay/GitopsProjem" and "https://github.com/Furkan-Alay/GitappProjem" repositories from the resource section via SSH link.
+
+# Then, open your terminal and create an SSH key. Run the following commands one by one:
 * cd
 * cd ~/.ssh
-* ssh-keygen =>>> Burada private ve public ssh key oluşacaktır.
-* cat [sshkeyadınız] =>>> Burada içeriği kopyalayın.
-# Daha sonra oluşturduğunuz public Key bilgilerinizi Kendi Github SSH Key kısmına kaydedin. (Github hesabınıza girin >>>> Settings >>>>> SSH and GPG keys >>> New SSH key >>> Gerekli bilgileri girin ve Add basın) 
-# Terminalinizde Git yükle değilse git paketini yükleyiniz.
-# Daha sonra Terminalinizi açın
-* mkdir ~/Desktop/[Klasör adınız]
-* cd ~/Desktop/[Klasör adınız]
-* Oluşturduğunuz fork kaynak kodlarına girin ve SSH linklerini kopyalayın.
-* git clone [SSH Klone linki(Terraform kaynak kodu)] 
-* git clone [SSH Klone linki(Uygulama kaynak kodu)]
-## Bu projede Terraform kaynak kodu için "iac-vprofile" fork ve Uygulama kodu için "vprofile-action" isimleri kullandığımızı varsayacağım başka bir isim kullandıysanız değiştirin.
+* ssh-keygen =>>> This will generate a private and public SSH key.
+* cat [your-ssh-key-name] =>>> Copy the content from here.
+
+# Now, add your generated public SSH key to your GitHub SSH keys section.  
+(GitHub Account >>> Settings >>> SSH and GPG keys >>> New SSH key >>> Enter necessary information and click Add)
+
+# Install Git if it's not already installed on your terminal.
+
+# Open your terminal:
+* mkdir ~/Desktop/[YourFolderName]
+* cd ~/Desktop/[YourFolderName]
+* Go to your forked source codes and copy the SSH clone links.
+* git clone [SSH clone link for Terraform source code]
+* git clone [SSH clone link for Application source code]
+
+## In this project, we assume the Terraform source code is named "iac-vprofile" and the Application source code is "vprofile-action".  
+If you used different names, make sure to replace them accordingly.
+
 * ls
 * cd iac-vprofile
 * git config core.sshCommand "ssh -i ~/.ssh/gitaction -F /dev/null"
 * cd ../vprofile-action/
 * git config core.sshCommand "ssh -i ~/.ssh/gitaction -F /dev/null"
-## Burada kendi Github hesap adınızı ve mailinizi giriniz.
+
+## Enter your own GitHub username and email:
 * git config --global user.name devops541
 * git config --global user.email furkanalay428@gmail.com
 * cd ..
-### Yeni bir klasör kopyaladık istediğiniz ismi burada verebilirsiniz.
+
+### Create a new folder (you can give it any name you like):
 * cp -r iac-vprofile/ main-iac
 * cd iac-vprofile
 * git checkout stage
-### Şimdi ise Github Secrets adımlarımızı oluşturalım. Burada AWS ortamında oluşturduğumuz AWS Access Key,Secret Key,S3 Bucket ve ECR Repository bilgilerini Github Secret kısmına kaydedeceğiz.
-* Terraform ve Uygulama kodlarını fork etmiştik. Bu kaynak kodlarına giriyoruz ve "Secret and variables" kısmındaki "Actions" kısımlarına basıyoruz.
-* AWS hesabımıza giriyoruz ve projenin sonuna kadar kullanacağımız "Region" seçiyoruz.
-* "IAM" servisini açıp Create User kısmına basıyoruz. Bu kullanıcının "Administrator Access" yetkisine sahip olması gerekiyor çünkü AWS hesabında kaynak kullanacaktır.
-* IAM User kullanıcısı oluşturuyoruz. Bu kullanıcı için "Create Access Key" kısmına basıp "Access Key" ve "Secret Key" oluşturuyoruz.
-* Access Key ve Secret Key bilgilerini kopyalıyoruz.
-* Terraform kaynak kodumuzun ve Uygulama kısmına Github Secret kısmına bu bilgileri kaydediyoruz.
-* AWS Hesabımızda "S3 Bucket" oluşturuyoruz ve "S3 Bucket Name" kopyalıyoruz.
-* S3 Bucket Name kısmını Terraform kaynak kodumuzun içerisinde olduğu Github Secret kısmına kaydediyoruz.Buraya kaydetmemizin sebebi S3 Bucket servisini Terraform içerisinde kullanacağız  
-* AWS Hesabımızda ECR(Elastic Container Registry) içerisinde private bir repository oluşturuyoruz ve ECR URL'mizi kopyalıyoruz.
-* ECR URL'mizi Uygulama kaynak kodumuzun içerisinde olduğu Github Secret kısmına kaydediyoruz.
-### Şimdi ise Terraform kodlarımızın içerisine Girip VPC infrastructure ve EKS Cluster oluşturalım.
-* Terraform kaynak kodumuzun "iac-vprofile" klasörünü açıyoruz. VSCode uygulamasıyla açmamız gerekiyor.
-* terraform klasörü içerisindeki "variables.tf" dosyamızı açıyoruz. AWS hesabımızdaki region bilgisini ve terraform ile oluşturacağımız EKS Cluster adını "default" kısmında yazıyoruz.
-* Aynı şekilde terraform klasörü içerisindeki "terraform.tf" dosyamızı açıyoruz. "backend "s3"" içerisindeki "bucket" kısmına AWS Hesabımızda oluşturduğumuz S3 bucket name kısmını giriyoruz. AWS region bilgilerimizi de "region" kısmına giriyoruz. "key" kısmına dokunmuyoruz.
-* "vpc.tf" dosyamızı açıyoruz. "name" değerine EKS Cluster için belirlediğimiz ismi giriyoruz.
-* VSCode Source Control paneline gelip Projemizi "Commit & Push" seçeneğiyle Github'a push etmeliyiz.
-* Çıkan ekranda Commit mesajını yazıp "Save" seçeneğine basacağız.
-### Şimdi ise Terraform kodlarımızı Github Actions kısmında çalıştıralım.
-* Terraform kaynak kodumuzun "iac-vprofie" klasörünü VScode ile açtık.
-* ".github/workflows" adında bir klasör oluşturduk.Bu klasör içinde "terraform.yml" dosyası oluşturuyoruz.Bu dosya ile github actions içerisinde terraform kodlarımızı çalıştırmış olacağız.
-* Aşağıdaki kodları "terraform.yml" dosyamıza yapıştıralım
-``` bash
 
+### Now let’s set up our GitHub Secrets.  
+We’ll add AWS Access Key, Secret Key, S3 Bucket, and ECR Repository information to the GitHub Secret section.
+
+* Go to both your forked Terraform and Application repositories, then click on "Secrets and variables" under the "Actions" tab.
+* Log in to your AWS account and select the region you'll be using throughout the project.
+* Open the "IAM" service, create a new user with "Administrator Access" permissions.
+* Generate "Access Key" and "Secret Key" for this IAM user.
+* Copy the Access Key and Secret Key values.
+* Add these keys to the Secrets section in both your Terraform and Application repositories on GitHub.
+
+* Create an "S3 Bucket" in your AWS account and copy its name.
+* Add this S3 Bucket name to the Secrets section in your Terraform repository since we’ll use it for Terraform state management.
+
+* Create a private repository in AWS ECR (Elastic Container Registry) and copy its URL.
+* Add this ECR URL to the Secrets section in your Application repository.
+
+### Now let’s configure the Terraform code to create the VPC infrastructure and EKS Cluster:
+* Open your Terraform source code folder "iac-vprofile" with VSCode.
+* Open the "variables.tf" file inside the "terraform" folder.  
+Set your AWS region and EKS cluster name under the "default" section.
+
+* Open the "terraform.tf" file in the same folder.  
+In the "backend s3" block:
+  * Replace the "bucket" value with your AWS S3 Bucket name.
+  * Set the "region" value to your AWS region.
+  * Leave the "key" value unchanged.
+
+* Open the "vpc.tf" file and set the "name" value to your chosen EKS Cluster name.
+
+* Go to VSCode Source Control panel and select "Commit & Push" to push your project to GitHub.
+* Enter a commit message and click "Save".
+
+### Now, let’s run our Terraform code in GitHub Actions:
+* Open your "iac-vprofile" folder with VSCode.
+* Create a folder named ".github/workflows".
+* Inside this folder, create a file named "terraform.yml".
+* Paste the following code into your "terraform.yml" file:
+
+```bash
 name: "Vprofile IAC"
 
 on:
@@ -67,10 +95,8 @@ on:
       - terraform/**
 
 env:
-  # Credentials for deployment to AWS
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  # S3 bucket for the Terraform state
   BUCKET_TF_STATE: ${{ secrets.BUCKET_TF_STATE }}
   AWS_REGION: us-east-2
   EKS_CLUSTER: vprofile-eks
@@ -113,7 +139,6 @@ jobs:
       - name: Terraform plan status
         if: steps.plan.outcome == 'failure'
         run: exit 1
-
 ```
 
 * Yukarıda yapıştırdığım kod içerisindeki "AWS_REGION" kısmına S3 Bucket ve ECR bölgemizi ekliyoruz.
@@ -143,27 +168,53 @@ jobs:
          if: steps.apple.outcome == 'success' && steps.getconfig.outcome == 'success'
          run: kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.1.3/deploy/static/provider/aws/deploy.yaml
 ```
-* Buradaki komutları VPC ve EKS Cluster oluşturacak olan son komutlarımızdır. Bu komutları bir önceki komutlarla birleştirmelisiniz.
-* terraform/ klasörümüze bir içerik ekledik ve Commit&Push işlemi yaptık.
-* Github Actions kısmında Workflow başlayacaktır ancak son eklediğimiz komutlar çalışmayacaktır.Çünkü "main" stage içerisinde push işlemi yapmadık.Projenin sonunda push işlemini gerçekleştireceğiz.
-* Terraform ve Uygulama kodumuzun olduğu klasörü terminalle açıyoruz.Aşağıdaki komutlarla merge işlemini gerçekleştirmiş olacağız:
+* The following commands are the final ones to create the VPC and EKS Cluster. You should combine them with the previous commands.
+* We added content to our terraform/ folder and performed Commit & Push.
+* In the GitHub Actions section, the workflow will start, but the latest commands won’t run yet because we haven’t pushed them to the "main" stage.  
+We will perform this push operation at the end of the project.
+
+* Open the folder containing both Terraform and Application source code in your terminal.  
+Run the following commands to perform the merge operation:
 * cd iac-vprofile/
 * git checkout stage
 * git pull
 * git checkout main
 * git add .
-* git commit -m "Bu bir Duzeltme mesajıdır"
+* git commit -m "This is a Fix message"
 * git merge stage
-### Şimdi ise Uygulamamızın Workflow kısmına giriş yapalım. Burada Sonar Cloud oluşturacağız,Sonar token oluşturacağız ve Github Secret ayarlarını yapacağız.
-* https://sonarcloud.io/ sitesinden Github hesabımızdan bir sonarcloud hesabı oluşturuyoruz.
-* "Create new organization" basarak manuel olarak organizasyon oluşturmamız gerekiyor. "Free Plan" seçmek bizim için yeterli olacaktır. "Analyze a new project" basıyoruz."Display name" ve "Project Key" bilgilerini aynı giriyoruz. "Public" visibility seçiyoruz.
-* Sağ yukarıdan "My account" basıyoruz."Security" basıyoruz. Burada bir tane token oluşturuyoruz.Token oluşturduktan sonra çıkan şifreyi kopyalıyoruz.Github Secret kısmında yeni bir Secret oluşturuyoruz."Name" kısmına "SONAR_TOKEN" yazdıktan sonra Token şifremizi secret kısmına giriyoruz ve add basıyoruz.
-* Oluşturduğumuz Organizasyon ismini Secret kısmına giriyoruz ve name olarak "SONAR_ORGANIZATION" giriyoruz.
-* Yeni bir Secret açıyoruz ve name kısmına "SONAR_PROJECT_KEY" giriyoruz secret kısmına ise "Project_Key" bilgisimizi giriyoruz.
-* Son olarak yeni bir Github Secret oluşturuyoruz.Name kısmına "SONAR_URL" giriyoruz Secret kısmına ise "https://sonarcloud.io" giriyoruz. 
-* Fork ettiğimizi uygulama kaynak kodumuzu VScode ile açıyoruz.
-* ".github/workflows" adında bir klasör oluşturuyoruz ve bu klasörün içerisine "main.yml" dosyası oluşturuyoruz.Bu dosyamızın içerisin aşağıdaki kodları yazıyoruz:
-``` bash
+
+### Now let’s enter the Application’s Workflow section.  
+We’ll set up SonarCloud, create a Sonar token, and configure GitHub Secrets.
+
+* Go to https://sonarcloud.io/ and sign up with your GitHub account to create a SonarCloud account.
+* Click "Create new organization" and manually create an organization.  
+Select the "Free Plan" — it will be sufficient.  
+Click "Analyze a new project". Enter the same value for both "Display name" and "Project Key". Select "Public" visibility.
+
+* On the top right, click "My account", then "Security".  
+Generate a new token and copy the generated password.  
+In your GitHub repository’s Secrets section, create a new Secret:
+  * Name: `SONAR_TOKEN`
+  * Value: Paste your token password.
+
+* Add the name of your created organization as a Secret:
+  * Name: `SONAR_ORGANIZATION`
+  * Value: Enter your organization name.
+
+* Create another new Secret:
+  * Name: `SONAR_PROJECT_KEY`
+  * Value: Enter your Project Key.
+
+* Lastly, create one more GitHub Secret:
+  * Name: `SONAR_URL`
+  * Value: `https://sonarcloud.io`
+
+* Open the forked application source code in VSCode.
+* Create a folder named `.github/workflows`.
+* Inside this folder, create a file named `main.yml`.
+* Copy and paste the following code into your `main.yml` file:
+
+```bash
 name: vprofile actions
 on: workflow_dispatch
 env:
@@ -184,30 +235,29 @@ jobs:
       - name: Checkstyle
         run: mvn checkstyle:checkstyle
 
-      # Setup java 11 to be default (sonar-scanner requirement as of 5.x)
+      # Setup Java 11 to be default (sonar-scanner requirement as of 5.x)
       - name: Set Java 11
         uses: actions/setup-java@v3
         with:
-         distribution: 'temurin' # See 'Supported distributions' for available options
-         java-version: '11'
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '11'
 
       # Setup sonar-scanner
       - name: Setup SonarQube
         uses: warchant/setup-sonar-scanner@v7
 
-
       # Run sonar-scanner
       - name: SonarQube Scan
         run: sonar-scanner
-           -Dsonar.host.url=${{ secrets.SONAR_URL }}
-           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
-           -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }}
-           -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
-           -Dsonar.sources=src/
-           -Dsonar.junit.reportsPath=target/surefire-reports/ 
-           -Dsonar.jacoco.reportsPath=target/jacoco.exec 
-           -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml
-           -Dsonar.java.binaries=target/test-classes/com/visualpathit/account/controllerTest/  
+          -Dsonar.host.url=${{ secrets.SONAR_URL }}
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+          -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }}
+          -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
+          -Dsonar.sources=src/
+          -Dsonar.junit.reportsPath=target/surefire-reports/ 
+          -Dsonar.jacoco.reportsPath=target/jacoco.exec 
+          -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml
+          -Dsonar.java.binaries=target/test-classes/com/visualpathit/account/controllerTest/  
 
       # Check the Quality Gate status.
       - name: SonarQube Quality Gate check
@@ -220,16 +270,19 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_URL }} #OPTIONAL
 ```
-* VScode Source Control kısmından "Commit&Push" basıyoruz.
-* Uygulamamızın kaynak koduna geliyoruz.Actions kısmına geliyoruz."vprofile-actions" seçeneğine basıyoruz. "Run workflow" basıyoruz.İlk başta workflow hata verecektir.Tekrardan çalıştırıyoruz ve Test işlemi bitti.
-### Şimdi ise Docker container Build ve Publish işlemini yapalım.
-* "main.yml" dosyamızın içerisine aşağıdaki kodları yapıştırıyoruz:
-  
+* From the VSCode Source Control panel, click "Commit & Push".
+* Go to your application source code repository, then to the "Actions" tab.  
+Click on "vprofile-actions", then "Run workflow".  
+It will fail the first time — run it again and the test process will complete.
+
+### Now, let's build and publish the Docker container image.
+* In the `main.yml` file, paste the following code exactly without changing its location in the file:
+
+```bash
   BUILD_AND_PUBLISH:   
     needs: Testing
     runs-on: ubuntu-latest
     steps:
-  
       - name: Code checkout
         uses: actions/checkout@v4
 
@@ -246,20 +299,39 @@ jobs:
           dockerfile: ./Dockerfile
           context: ./
 
-* Buradaki kodları bozmadan "main.yml" dosyamızı içerisinde kodun yerlerini değiştirmeden yapıştırıyoruz.
-* VSCode Source Control kısmından "Commit&Push" işlemini gerçekleştiriyoruz.
-* Uygulamamızın kaynak kodunun "Actions" kısmına geliyoruz."vprofile-actions" kısmına bastık "Run workflow" bastık ve projemiz başarılı ile çalıştı.
-* AWS Hesabımızın ECR Registry kısmına gelip uygulamamıza bastığımızda docker image build & publish işleminin gerçekleştiğini görebiliriz.
-### Şimdi ise son kısım olan EKS Deploy bölümünü ayarlayacağız.
-* Windows Powershell ve Gitbash terminalinde kubernetes-helm paketini indirip kurmamız gerekiyor.
-* Uygulamamızın kaynak koduna giriş yapıyoruz.Bu komutları yazıyoruz:
-* helm create vprofilecharts
-* rm -rf vprofilecharts/templates/*
-* cp kubernetes/vpro-app/* vprofilecharts/templates/
-* cd vprofilecharts/templates/
-* VSCode ile Uygulama kaynak kodumuzu açıyoruz."helm\vprofilecharts/templatesa/vproappdep.yml" dosyamızı açıyoruz ve bu içeriği "image: vprofile/vprofileapp" bu "image: {{ .Values.appimage}}:{{ .Values.apptag }}" içeriğe dönüştürüyoruz.
-* main.yml dosymaıza bu kodları ekliyoruz:
-``` bash
+```
+Paste this code into your main.yml file without modifying its position.
+
+From the VSCode Source Control panel, perform a "Commit & Push".
+
+Go to the "Actions" tab of your application source code repository.
+Click "vprofile-actions", then "Run workflow" and your project will run successfully.
+
+Go to the AWS ECR Registry service. Click on your application repository and you'll see the Docker image has been built and published.
+
+Now, let's configure the final EKS Deploy step.
+Install the Kubernetes-Helm package on your Windows Powershell and Gitbash terminal.
+
+Enter your application source code directory and run these commands:
+```bash
+helm create vprofilecharts
+
+rm -rf vprofilecharts/templates/*
+
+cp kubernetes/vpro-app/* vprofilecharts/templates/
+
+cd vprofilecharts/templates/
+```
+Open your application source code with VSCode.
+Go to helm/vprofilecharts/templates/vproappdep.yml and replace this content:
+
+image: vprofile/vprofileapp
+with
+
+image: {{ .Values.appimage}}:{{ .Values.apptag }}
+
+Now, add the following code to your main.yml file:
+```bash
   DeployToEKS:
     needs: BUILD_AND_PUBLISH
     runs-on: ubuntu-latest
@@ -297,28 +369,64 @@ jobs:
           name: vprofile-stack
 
 ```
-* VSCode Source Control kısmına geliyoruz Commit&Push işlemi yapıyoruz.
-* Github Actions kısmına geliyoruz "vprofile-actions" kısmına basıyoruz ve Run Workflow basıyoruz ve workflow başlayacaktır.
-* Tüm adımlar tamamlandıktan sonra Tüm kaynaklarımız oluşmuş bir şekilde ve uygulamamız docker container içerisinde deploy edilmiş şekilde yani Uygulamamız bitmiş olacaktır.
-* Uygulamamıza erişmek için AWS Load balancer kısmına gidip DNS Adresini kopyalıyoruz ve tarayıcıya yapıştırıyoruz. Sonuç olarak uygulamamız karşımıza gelecektir.
-* İstersek DNS Adresimizi bir tane domain hizmeti satın aldıktan sonra "CNAME" kayıdı olarak tutabiliriz.Böylece kullanıcılar sitemize host adımızı yazarak erişebilecekler.
-#### Uygulamamız bittiğine göre şimdi Uygulamamızın kaynaklarının nasıl silineceğini göstermiş olacağım.
-* Tüm temizliğimiz iki adımdan oluşacaktır.Bunlardan biri Ingress Controller temizliği diğeri ise terraform destroy komutu olacaktır.
-* AWS hesabımıza giriş yaptık IAM User kısmını açtık ve oluşturduğumuz user'a tıkladık.
-* Bir tane Access ve Secret Key oluşturuyoruz.
-* Gitbash terminalimizi açıyoruz ve şu komutları yazıyoruz.
-* aws configure
-* Gerekli IAM User bilgilerinin ve region bilgilerinin girilmesi
-* rm -rf ~/.kube/config
-* aws eks update-kubeconfig --region us-east-2 --name vprofile-eks
-* Terraform uygulamamızın olduğu kaynak kodu açıyoruz.
-* cat .github/workflows/terraform.yml
-* en son satırda çıkan ve https ile başlayan linki kopyalıyoruz.
-* kubectl + delete + -f + linkimiz
-* helm uninstall vprofile-stack/
-* Aşağıdaki komutu yazdıktan sonra bize bir uyarı mesajı verecektir.Bu mesaj terraform versiyonunu değiştirmemiz ile ilgili olacaktır.Uyarıdaki versiyonu terraform.yml içerisindeki versiyonla değiştirmeliyiz.
-* terraform init -backend-config="bucket/vprofileaction5411" burada "vprofileaction5411" benim S3 Bucket adım olacaktır.Bu kısmı kendi S3 Bucket adınızla değiştiriniz.
-* Burada versiyon hatası verirse yukarıda belirtiğim gibi değiştiriğiniz ve tekrardan komutu yazınız.
-* yukarıdaki komutumuz uygulandıktan sonra son olarak aşağıdaki komutu yazınız.
-* terraform destroy
-* terraform destroy yazdıktan sonra "yes" yazmamız gerekiyor.tüm kaynakların silinmesi için 15 20 dakika beklememiz gerekiyor.
+From the VSCode Source Control panel, perform a "Commit & Push".
+
+Go to the GitHub Actions section, click "vprofile-actions", then "Run workflow" and the workflow will start.
+
+After all steps are completed, all resources will be created and your application will be deployed inside a Docker container.
+Your application will now be running.
+
+To access your application:
+
+Go to AWS Load Balancer service.
+
+Copy the DNS address.
+
+Paste it into your browser — your application will appear.
+
+Optionally, you can purchase a domain service and register the Load Balancer DNS address as a CNAME record.
+This way, users can access your application using your custom domain name.
+
+Since our application is complete, let's explain how to clean up all resources.
+The cleanup will consist of two steps: deleting the Ingress Controller and using the terraform destroy command.
+
+Log into your AWS account, go to the IAM User section, and select your created user.
+
+Generate a new Access and Secret Key.
+
+Open Gitbash terminal and run:
+```bash
+aws configure
+```
+Remove the Kubernetes config file:
+```bash
+rm -rf ~/.kube/config
+```
+Get the new Kube config file:
+```bash
+aws eks update-kubeconfig --region us-east-2 --name vprofile-eks
+```
+Open the Terraform source code directory.
+
+Run:
+```bash
+cat .github/workflows/terraform.yml
+```
+Copy the last line containing the HTTPS link.
+Delete the Kubernetes resources:
+```bash
+kubectl delete -f [your_copied_link]
+helm uninstall vprofile-stack/
+```
+Run the following command — it might give a warning about the Terraform version.
+If it does, update the version in terraform.yml according to the warning.
+terraform init -backend-config="bucket/vprofileaction5411"
+Replace vprofileaction5411 with your own S3 Bucket name.
+If you get a version error, fix it as mentioned above and run the command again.
+
+After this, run:
+```bash
+terraform destroy
+```
+After typing terraform destroy, type yes when prompted.
+Wait about 15-20 minutes for all resources to be fully removed.
